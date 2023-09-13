@@ -1,0 +1,10 @@
+#!/bin/sh
+# Should be ran as sudo
+# DWM Flexipatch creates the write protected files patches.h and config.h upon building the project,
+# and then subsequent make installs do not replace these files.  This is just a script to make a fresh
+# build based off the def.h files with a single call.
+
+rm patches.h
+rm config.h
+make clean install
+
