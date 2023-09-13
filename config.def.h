@@ -24,10 +24,10 @@ static const int scalepreview            = 4;        /* Tag preview scaling */
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH
 #if VANITYGAPS_PATCH
-static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
+static const unsigned int gappih         = 10;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 10;  /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
+static const unsigned int gappov         = 10;  /* vert outer gap between windows and screen edge */
 static const int smartgaps_fact          = 1;   /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
 #endif // VANITYGAPS_PATCH
 #if AUTOSTART_PATCH
@@ -900,17 +900,27 @@ static const Key on_empty_keys[] = {
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
 
+    // Vanity Gaps Patch
+    { MODKEY,                       XK_z,           incrgaps,       {.i = +3 } },
+    { MODKEY,                       XK_x,           incrgaps,       {.i = -3 } },
+    { MODKEY,                       XK_a,           togglegaps,     {0} },
+    { MODKEY|ShiftMask,             XK_a,           defaultgaps,    {0} },
+    // { MODKEY|ShiftMask,             XK_apostrophe,  togglesmartgaps,{0} }, /* no gaps if a single window */
+
     // Restart Sig Patch
 	{ MODKEY|ShiftMask,             XK_q,          quit,                   {1} },
+
+    // Fullscreen Patch
+	{ MODKEY,                       XK_f,          togglefullscreen,       {0} },
 
     // Stacker Patch
 	STACKKEYS(MODKEY,                              focus)
 	STACKKEYS(MODKEY|ShiftMask,                    push)
 
     // Default Settings
-	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
+	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} }, // Tiled (default)
+	{ MODKEY|ShiftMask,             XK_f,          setlayout,              {.v = &layouts[1]} }, // Floating
+	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} }, // Monacle
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
@@ -1017,24 +1027,6 @@ static const Key keys[] = {
 	#if INSETS_PATCH
 	{ MODKEY|ShiftMask|ControlMask, XK_a,          updateinset,            {.v = &default_inset } },
 	#endif // INSETS_PATCH
-	#if VANITYGAPS_PATCH
-	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
-	#endif // VANITYGAPS_PATCH
 	#if ALT_TAB_PATCH
 	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
 	#else
@@ -1121,9 +1113,6 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
-	#if TOGGLEFULLSCREEN_PATCH
-	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
-	#endif // TOGGLEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	{ MODKEY|ShiftMask,             XK_y,          togglefakefullscreen,   {0} },
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
