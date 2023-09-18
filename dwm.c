@@ -36,6 +36,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
 #include <X11/Xutil.h>
+#include <X11/Xresource.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
@@ -5150,6 +5151,39 @@ zoom(const Arg *arg)
 	#endif // ZOOMSWAP_PATCH
 }
 
+void
+set_base_color()
+{
+    // This funciton must be called before setup() to take effect
+
+    XrmInitialize();
+
+    char *resource_database = XResourceManagerString(dpy);
+    XrmDatabase resource_db;
+
+    if (resource_database != NULL) {
+        resource_db = XrmGetStringDatabase(resource_database);
+    } else {
+        fprintf(stderr, "Unable to load Xresources database\n");
+        exit(1);
+    }
+
+    char *resource_name = "~/.config/X11/Xresources";
+    char *resource_type = "dwm.accent";
+
+    XrmValue resource_value;
+    char *new_color = NULL;
+
+    if (XrmGetResource(resource_db, resource_name, resource_type, &resource_type, &resource_value)) {
+        new_color = resource_value.addr;
+    } else {
+        fprintf(stderr, "Resource not found\n");
+    }
+    for(int i = 0; i < strlen(new_color); i++) {
+        base_color[i] = new_color[i];
+    }
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -5221,6 +5255,7 @@ main(int argc, char *argv[])
 	#if COOL_AUTOSTART_PATCH
 	autostart_exec();
 	#endif // COOL_AUTOSTART_PATCH
+    set_base_color();
 	setup();
 #ifdef __OpenBSD__
 	#if SWALLOW_PATCH
