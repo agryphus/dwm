@@ -97,6 +97,14 @@ static const BarRule barrules[] = {
 	{ -1,        0,     BAR_ALIGN_NONE,   width_wintitle,           draw_wintitle,          click_wintitle,          NULL,                    "wintitle" },
 };
 
+// Nametag Patch
+#define NAMETAG_FORMAT "%s"
+/* The maximum amount of bytes reserved for each tag text. */
+#define MAX_TAGLEN 16
+/* The command to run (via popen). This can be tailored by adding a prompt, passing other command
+ * line arguments or providing name options. Optionally you can use other dmenu like alternatives
+ * like rofi -dmenu. */
+#define NAMETAG_COMMAND "dmenu < /dev/null"
 
 /* Tags
  * In a traditional dwm the number of tags in use can be changed simply by changing the number
@@ -125,7 +133,7 @@ static const BarRule barrules[] = {
  * until it an icon matches. Similarly if there are two tag icons then it would alternate between
  * them. This works seamlessly with alternative tags and alttagsdecoration patches.
  */
-static char *tagicons[][NUMTAGS] =
+static char tagicons[][NUMTAGS][MAX_TAGLEN] =
 {
 	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
@@ -217,11 +225,15 @@ static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
 
+    // Nametag Patch
+    { MODKEY|ShiftMask,             XK_n,          nametag,                {0} },
+
+
     // Vanity Gaps Patch
-    { MODKEY,                       XK_z,           incrgaps,       {.i = +3 } },
-    { MODKEY,                       XK_x,           incrgaps,       {.i = -3 } },
-    { MODKEY,                       XK_a,           togglegaps,     {0} },
-    { MODKEY|ShiftMask,             XK_a,           defaultgaps,    {0} },
+    { MODKEY,                       XK_z,          incrgaps,               {.i = +3 } },
+    { MODKEY,                       XK_x,          incrgaps,               {.i = -3 } },
+    { MODKEY,                       XK_a,          togglegaps,             {0} },
+    { MODKEY|ShiftMask,             XK_a,          defaultgaps,            {0} },
 
     // Restart Sig Patch
 	{ MODKEY|ShiftMask,             XK_q,          quit,                   {1} },
@@ -242,9 +254,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
-	{ MODKEY,                       XK_period,     focusmon,               {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } }, { MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
+	{ MODKEY,                       XK_Left,       focusmon,               {.i = -1 } },
+	{ MODKEY,                       XK_Right,      focusmon,               {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Left,       tagmon,                 {.i = -1 } }, 
+    { MODKEY|ShiftMask,             XK_Right,      tagmon,                 {.i = +1 } },
 	{ MODKEY,                       XK_space,      setlayout,              {0} },
 	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },

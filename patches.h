@@ -336,7 +336,7 @@
 /* This patch prevents dwm from drawing tags with no clients (i.e. vacant) on the bar.
  * https://dwm.suckless.org/patches/hide_vacant_tags/
  */
-#define BAR_HIDEVACANTTAGS_PATCH 0
+#define BAR_HIDEVACANTTAGS_PATCH 1
 
 /* With this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
  * and the bar will now overlay the display.
@@ -811,7 +811,7 @@
  *
  * https://dwm.suckless.org/patches/nametag/
  */
-#define NAMETAG_PATCH 0
+#define NAMETAG_PATCH 1
 
 /* Variant of the above which prepends the tag number to the given string.
  * The toggle does nothing on its own and need to be enabled in combination with the above. */
@@ -878,7 +878,7 @@
  * monitor (default).
  * https://dwm.suckless.org/patches/pertag/
  */
-#define PERTAG_PATCH 0
+#define PERTAG_PATCH 1
 
 /* Option to enable gaps on a per tag basis rather than globally.
  * Depends on both pertag and vanitygaps patches being enabled.
