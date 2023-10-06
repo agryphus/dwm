@@ -16,7 +16,7 @@ static const int topbar                  = 0;   /* 0 means bottom bar */
 static const int statusmon               = 'A';
 
 /* Indicators: see patch/bar_indicators.h for options */
-static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
+static int tagindicatortype              = INDICATOR_NONE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
 
@@ -104,7 +104,7 @@ static const BarRule barrules[] = {
 /* The command to run (via popen). This can be tailored by adding a prompt, passing other command
  * line arguments or providing name options. Optionally you can use other dmenu like alternatives
  * like rofi -dmenu. */
-#define NAMETAG_COMMAND "dmenu < /dev/null"
+#define NAMETAG_COMMAND "dmenuunicode output < /dev/null"
 
 /* Tags
  * In a traditional dwm the number of tags in use can be changed simply by changing the number
@@ -228,7 +228,6 @@ static const Key keys[] = {
     // Nametag Patch
     { MODKEY|ShiftMask,             XK_n,          nametag,                {0} },
 
-
     // Vanity Gaps Patch
     { MODKEY,                       XK_z,          incrgaps,               {.i = +3 } },
     { MODKEY,                       XK_x,          incrgaps,               {.i = -3 } },
@@ -251,13 +250,19 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} }, // Monacle
 	{ MODKEY|ShiftMask,             XK_t,          setlayout,              {.v = &layouts[3]} }, // BStack
 
+    // Monitor switching
+	{ MODKEY,                       XK_Left,       focusmon,               {.i = -1 } },
+	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
+	{ MODKEY,                       XK_Right,      focusmon,               {.i = +1 } },
+	{ MODKEY,                       XK_period,     focusmon,               {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Left,       tagmon,                 {.i = -1 } }, 
+	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } }, 
+    { MODKEY|ShiftMask,             XK_Right,      tagmon,                 {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
+
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
-	{ MODKEY,                       XK_Left,       focusmon,               {.i = -1 } },
-	{ MODKEY,                       XK_Right,      focusmon,               {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Left,       tagmon,                 {.i = -1 } }, 
-    { MODKEY|ShiftMask,             XK_Right,      tagmon,                 {.i = +1 } },
 	{ MODKEY,                       XK_space,      setlayout,              {0} },
 	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
