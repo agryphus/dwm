@@ -225,6 +225,10 @@ static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
 
+    // Spawning the terminal.  I use sxhkd for the rest of my hotkey needs, but this is defined here in case
+    // that program dies.
+    { MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
+
     // Nametag Patch
     { MODKEY|ShiftMask,             XK_n,          nametag,                {0} },
 
